@@ -13,14 +13,15 @@ class GPAPredictorApp:
 
     def load_pipeline(self):
         """Load the trained pipeline."""
-        if not os.path.exists(self.model_path):
-            st.error(f"Model file not found at {self.model_path}. Please check the path.")
-            st.stop()
         try:
+            # Load the model
             self.pipeline = joblib.load(self.model_path)
             if not hasattr(self.pipeline, 'predict'):
                 st.error("The loaded object is not a valid pipeline. Please check the `.pkl` file.")
                 st.stop()
+        except FileNotFoundError:
+            st.error(f"Model file not found at {self.model_path}. Please check the path.")
+            st.stop()
         except Exception as e:
             st.error(f"Failed to load model: {e}")
             st.stop()
@@ -117,6 +118,11 @@ class GPAPredictorApp:
 
 # Run the app
 if __name__ == "__main__":
-    model_path = r"C:\Users\jsten\PycharmProjects\PythonProject_test\models\best_random_forest_model.pkl"
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the path to the model file
+    model_path = os.path.join(script_dir, "..", "models", "best_random_forest_model.pkl")
+
     app = GPAPredictorApp(model_path)
     app.run()
