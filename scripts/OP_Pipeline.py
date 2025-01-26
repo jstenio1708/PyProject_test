@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
@@ -215,11 +216,14 @@ class MLPipeline:
 
 
 if __name__ == "__main__":
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
     # Configuration
     config = {
-        'file_path': r"C:\Users\jsten\PycharmProjects\PythonProject_test\data\cmu-sleep.csv",  # Windows path to dataset
+        'file_path': os.path.join(script_dir, "..", "data", "cmu-sleep.csv"),  # Relative path to dataset
         'target_column': 'term_gpa',
-        'model_save_path': r"C:\Users\jsten\PycharmProjects\PythonProject_test\models\best_random_forest_model.pkl",  # Windows path to save model
+        'model_save_path': os.path.join(script_dir, "..", "models", "best_random_forest_model.pkl"),  # Relative path to save model
         'cv_splits': 10,
         'cv_repeats': 5,
         'random_state': 42,
@@ -255,7 +259,7 @@ if __name__ == "__main__":
 
     # Save cleaned dataset to CSV
     try:
-        cleaned_data_path = r"C:\Users\jsten\PycharmProjects\PythonProject_test\models\cleaned_data.csv"
+        cleaned_data_path = os.path.join(script_dir, "..", "models", "cleaned_data.csv")
         results['df'].to_csv(cleaned_data_path, index=False)
         print(f"Cleaned dataset saved to {cleaned_data_path}.")
     except Exception as e:
@@ -263,7 +267,7 @@ if __name__ == "__main__":
 
     # Save model performance statistics to CSV
     try:
-        stats_path = r"C:\Users\jsten\PycharmProjects\PythonProject_test\models\model_performance_stats.csv"
+        stats_path = os.path.join(script_dir, "..", "models", "model_performance_stats.csv")
         stats_df = pd.DataFrame({
             'Metric': ['Train MSE', 'Test MSE', 'Train MAE', 'Test MAE', 'Train MAE %', 'Test MAE %'],
             'Value': [
@@ -279,7 +283,7 @@ if __name__ == "__main__":
 
     # Save feature importances to CSV
     try:
-        varimp_path = r"C:\Users\jsten\PycharmProjects\PythonProject_test\models\feature_importances.csv"
+        varimp_path = os.path.join(script_dir, "..", "models", "feature_importances.csv")
         results['importance_df'].to_csv(varimp_path, index=False)
         print(f"Feature importances saved to {varimp_path}.")
     except Exception as e:
